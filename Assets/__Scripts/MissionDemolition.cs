@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public enum GameMode
@@ -45,6 +46,7 @@ public class MissionDemolition : MonoBehaviour
 
         castle = Instantiate<GameObject>(castles[level]);
         castle.transform.position = castlePos;
+        
 
         Goal.goalMet = false;
 
@@ -79,10 +81,10 @@ public class MissionDemolition : MonoBehaviour
         level++;
         if (level == levelMax)
         {
-            level = 0;
             shotsTaken = 0;
         }
-        StartLevel();
+        SceneManager.LoadScene("_Game_Over_");
+        level = 0;
     }
 
     static public void SHOT_FIRED()

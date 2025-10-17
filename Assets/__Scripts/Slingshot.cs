@@ -21,14 +21,20 @@ public class Slingshot : MonoBehaviour
     public GameObject projectile;
     public bool aimingMode;
 
+    [SerializeField] private AudioSource redBird;
+
+    void Start()
+    {
+        rubber.SetPosition(0, first.position);
+        rubber.SetPosition(2, second.position);
+        //bandSnap = GetComponent<AudioSource>();
+    }
     void Awake()
     {
         Transform launchPointTrans = transform.Find("LaunchPoint");
         launchPoint = launchPointTrans.gameObject;
         launchPoint.SetActive(false);
         launchPos = launchPointTrans.position;
-        rubber.SetPosition(0, first.position);
-        rubber.SetPosition(2, second.position);
     }
     void OnMouseEnter()
     {
@@ -50,8 +56,10 @@ public class Slingshot : MonoBehaviour
         projectile = Instantiate(projectilePrefab) as GameObject;
         // Start it at the launchPoint
         projectile.transform.position = launchPos;
+        rubber.transform.position = launchPos;
         // set it to isKinematic for now
         projectile.GetComponent<Rigidbody>().isKinematic = true;
+        
     }
 
     void Update()
@@ -73,8 +81,10 @@ public class Slingshot : MonoBehaviour
         }
         // move projectile to new position
         Vector3 projPos = launchPos + mouseDelta;
+        Vector3 rubberPos = launchPos + mouseDelta;
         projectile.transform.position = projPos;
-
+        rubber.transform.position = rubberPos;
+        rubber.SetPosition(1, rubber.transform.position); //
         if (Input.GetMouseButtonUp(0))
         {
             //the mouse has been released
@@ -88,18 +98,15 @@ public class Slingshot : MonoBehaviour
             Instantiate<GameObject>(projLinePrefab, projectile.transform);
             projectile = null;
             MissionDemolition.SHOT_FIRED();
-        }
-        if (Input.GetMouseButton(0))
-        {
-            rubber.SetPosition(1, GetMousePos());
+            redBird.Play();
         }
     }
 
-    Vector3 GetMousePos()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z -= Camera.main.transform.position.z;
-        Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePos);
-        return mousePosInWorld - transform.position;
-    }
+    // Vector3 GetMousePos()
+    // {
+    //     Vector3 mousePos = Input.mousePosition;
+    //     mousePos.z -= Camera.main.transform.position.z;
+    //     Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePos);
+    //     return mousePosInWorld - transform.position;
+    // }
 }
