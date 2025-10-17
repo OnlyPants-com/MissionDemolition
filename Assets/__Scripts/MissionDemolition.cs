@@ -20,9 +20,10 @@ public class MissionDemolition : MonoBehaviour
     public TextMeshProUGUI uitShots;
     public Vector3 castlePos;
     public GameObject[] castles; // array of castles
+    public int level;
+
 
     [Header("Dynamic")]
-    public int level;
     public int levelMax;
     public int shotsTaken;
     public GameObject castle;
