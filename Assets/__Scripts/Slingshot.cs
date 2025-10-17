@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour
 {
+    [SerializeField] private LineRenderer rubber;
+    [SerializeField] private Transform first;
+    [SerializeField] private Transform second;
+
     // fields set in the Unity Inspector pane
     [Header("Inscribed")]
     public GameObject projectilePrefab;
@@ -23,6 +27,8 @@ public class Slingshot : MonoBehaviour
         launchPoint = launchPointTrans.gameObject;
         launchPoint.SetActive(false);
         launchPos = launchPointTrans.position;
+        rubber.SetPosition(0, first.position);
+        rubber.SetPosition(2, second.position);
     }
     void OnMouseEnter()
     {
@@ -83,5 +89,17 @@ public class Slingshot : MonoBehaviour
             projectile = null;
             MissionDemolition.SHOT_FIRED();
         }
+        if (Input.GetMouseButton(0))
+        {
+            rubber.SetPosition(1, GetMousePos());
+        }
+    }
+
+    Vector3 GetMousePos()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z -= Camera.main.transform.position.z;
+        Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePos);
+        return mousePosInWorld - transform.position;
     }
 }
