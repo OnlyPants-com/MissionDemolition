@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Slingshot : MonoBehaviour
 {
@@ -20,14 +21,14 @@ public class Slingshot : MonoBehaviour
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
-
     [SerializeField] private AudioSource redBird;
 
+    [Header("Preview Line")]
+    public DottedLine dottedLine;
     void Start()
     {
         rubber.SetPosition(0, first.position);
         rubber.SetPosition(2, second.position);
-        //bandSnap = GetComponent<AudioSource>();
     }
     void Awake()
     {
@@ -59,6 +60,7 @@ public class Slingshot : MonoBehaviour
         rubber.transform.position = launchPos;
         // set it to isKinematic for now
         projectile.GetComponent<Rigidbody>().isKinematic = true;
+        //dottedLine.ClearLine();
         
     }
 
@@ -84,7 +86,11 @@ public class Slingshot : MonoBehaviour
         Vector3 rubberPos = launchPos + mouseDelta;
         projectile.transform.position = projPos;
         rubber.transform.position = rubberPos;
-        rubber.SetPosition(1, rubber.transform.position); //
+        rubber.SetPosition(1, rubber.transform.position);
+
+        Vector3 launchVelocity = -mouseDelta * velocityMult;
+        dottedLine.DrawDottedLine(launchPos, launchVelocity);
+
         if (Input.GetMouseButtonUp(0))
         {
             //the mouse has been released

@@ -11,6 +11,7 @@ public class ProjectileLine : MonoBehaviour
     static List<ProjectileLine> PROJ_LINES = new List<ProjectileLine>();
     private const float DIM_MULT = 0.75f;
     private LineRenderer _line;
+    private LineRenderer _preview;
     private bool _drawing = true;
     private Projectile _projectile;
     void Start()
@@ -18,6 +19,9 @@ public class ProjectileLine : MonoBehaviour
         _line = GetComponent<LineRenderer>();
         _line.positionCount = 1;
         _line.SetPosition(0, transform.position);
+        _preview = GetComponent<LineRenderer>();
+        _preview.positionCount = 1;
+        _preview.SetPosition(0, transform.position);
 
         _projectile = GetComponentInParent<Projectile>();
         ADD_LINE(this);
@@ -45,7 +49,8 @@ public class ProjectileLine : MonoBehaviour
         PROJ_LINES.Remove(this);
     }
 
-    static void ADD_LINE(ProjectileLine newLine) {
+    static void ADD_LINE(ProjectileLine newLine)
+    {
         Color col;
 
         foreach (ProjectileLine pl in PROJ_LINES)
@@ -55,5 +60,10 @@ public class ProjectileLine : MonoBehaviour
             pl._line.startColor = pl._line.endColor = col;
         }
         PROJ_LINES.Add(newLine);
+    }
+    
+    void PREVIEW_LINE()
+    {
+        
     }
 }

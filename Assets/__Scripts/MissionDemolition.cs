@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Unity.VisualScripting;
 
 public enum GameMode
 {
@@ -54,6 +55,8 @@ public class MissionDemolition : MonoBehaviour
         mode = GameMode.playing;
 
         FollowCam.SWITCH_VIEW(FollowCam.eView.both);
+        
+        
     }
 
     void UpdateGUI()
@@ -65,6 +68,10 @@ public class MissionDemolition : MonoBehaviour
     void Update()
     {
         UpdateGUI();
+        if (level == levelMax)
+        {
+            SceneManager.LoadScene("_Game_Over_");
+        }
 
         if ((mode == GameMode.playing) && Goal.goalMet)
         {
@@ -82,11 +89,16 @@ public class MissionDemolition : MonoBehaviour
         if (level == levelMax)
         {
             shotsTaken = 0;
+            level = 0;
+            Load();
         }
-        SceneManager.LoadScene("_Game_Over_");
-        level = 0;
+        StartLevel();
     }
 
+    void Load()
+    {
+        SceneManager.LoadScene("_Game_Over_");
+    }
     static public void SHOT_FIRED()
     {
         S.shotsTaken++;
